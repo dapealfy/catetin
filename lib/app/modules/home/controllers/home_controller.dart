@@ -25,8 +25,11 @@ class HomeController extends GetxController {
     update();
   }
 
-  updateBox() {
-    box = box;
+  checkTodo(index, data) {
+    box!.putAt(index, {
+      'todo': data['todo'],
+      'checked': !data['checked'],
+    });
     update();
   }
 }

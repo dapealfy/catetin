@@ -11,9 +11,7 @@ void main() async {
   Hive.init('${(await getApplicationDocumentsDirectory()).path}/databases');
   runApp(
     GetMaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
+      theme: ThemeData(useMaterial3: true, brightness: Brightness.dark),
       title: "Catetin",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,

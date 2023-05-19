@@ -9,7 +9,7 @@ class AddTodoController extends GetxController {
     HomeController homeController = Get.put(HomeController());
     homeController.addTodo({
       'todo': todo.text,
-      'createdAt': DateTime.now().toString(),
+      'checked': false,
     });
     Get.back();
   }

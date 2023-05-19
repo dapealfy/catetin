@@ -17,9 +17,9 @@ class HomeView extends GetView<HomeController> {
         actions: [
           IconButton(
             onPressed: () {
-              c.removeAll();
+              Get.dialog(deleteAllDialog(c));
             },
-            icon: Icon(Icons.delete),
+            icon: Icon(Icons.delete_forever),
           )
         ],
       ),
@@ -35,15 +35,46 @@ class HomeView extends GetView<HomeController> {
                   : homeController.box!.values.length,
               itemBuilder: (context, index) {
                 var todo = homeController.box!.getAt(index);
-                return ListTile(
-                  title: Text(todo['todo']),
-                  trailing: IconButton(
-                    onPressed: () {
-                      homeController.removeTodo(index);
+                return Dismissible(
+                  background: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    color: Colors.red[300],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    homeController.removeTodo(index);
+                  },
+                  key: Key(DateTime.now().toString()),
+                  child: ListTile(
+                    onTap: () {
+                      c.checkTodo(index, todo);
                     },
-                    icon: Icon(
-                      Icons.remove_circle,
-                      color: Colors.red,
+                    title: Text(
+                      todo['todo'],
+                      style: todo['checked'] == true
+                          ? TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.grey,
+                            )
+                          : TextStyle(color: Colors.white),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        homeController.removeTodo(index);
+                      },
+                      icon: Icon(
+                        Icons.remove_circle,
+                        color: Colors.red[300],
+                      ),
                     ),
                   ),
                 );
@@ -58,4 +89,28 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
+}
+
+Widget deleteAllDialog(c) {
+  return AlertDialog(
+    title: Text('Apa kamu yakin ingin hapus semua?'),
+    actions: [
+      MaterialButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text('Batal')),
+      ElevatedButton(
+          onPressed: () {
+            c.removeAll();
+            Get.back();
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              'Hapus',
+            ),
+          )),
+    ],
+  );
 }
